@@ -17,7 +17,12 @@ const Clients = () => {
                     key={client.id}
                 >
                     <Link
-                        href={`/clients/${client.id}`}
+                        href={{
+                            pathname: "/clients/[id]",
+                            query: {
+                                id: client.id
+                            }
+                        }}
                     >
                         {client.name}
                     </Link>
