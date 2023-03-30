@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import EventItem from '../EventItem'
 
 function EventList(props) {
   return (
-    <div>
+    <Fragment>
+      {
+        props.events.length > 0 ?
+        <Fragment>
         <h1>Event List</h1>
         <ul>
             {
@@ -21,9 +24,9 @@ function EventList(props) {
               ))
             }
           </ul>
-
-    </div>
-  )
+        </Fragment> :
+    <h3>No events available</h3>}
+  </Fragment>)
 }
 
 export default EventList
