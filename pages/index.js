@@ -9,24 +9,7 @@ export default function Home() {
   return (
     <div>
         <h1>Home Page</h1>
-        <EventList>
-          <ul>
-            {
-              featureEvents.map((eventItem, index) => (
-                <EventItem
-                  key={index}
-                  id={eventItem.id}
-                  title={eventItem.title}
-                  description={eventItem.description}
-                  location={eventItem.location}
-                  date={eventItem.date}
-                  image={eventItem.image}
-                  idFeatured={eventItem.isFeatured}
-                />
-              ))
-            }
-          </ul>
-        </EventList>
+        <EventList events={featureEvents} />
     </div>
   )
 }
