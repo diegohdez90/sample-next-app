@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 import classes from './EventItem.module.css';
+import Button from '../Button';
+import { MapPinIcon, CalendarIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
 const EventItem = (props) => {
     const readableDate = new Date(props.date).toLocaleDateString('en-US', {
@@ -19,9 +20,9 @@ const EventItem = (props) => {
             <div className={classes.container}>
                 <h5>{props.title}</h5>
                 <p>{props.description}</p>
-                <p>{formattedAddress}</p>
-                <p>{readableDate}</p>
-                <Link href={eventLink}>Event Link</Link>
+                <p><MapPinIcon width={16} /> {formattedAddress}</p>
+                <p><CalendarIcon width={16} /> {readableDate}</p>
+                <Button href={eventLink} label="Event link" iconRight={<ArrowRightIcon width={16} />}>Event Link</Button>
             </div>
         </div>
     </div>);
