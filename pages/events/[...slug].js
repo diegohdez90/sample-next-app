@@ -15,8 +15,6 @@ const FilteredEventPage = () => {
         </div>)
     }
 
-    console.log(year, month);
-
     const events = getFilteredEvents({
         year: +year,
         month: +month
