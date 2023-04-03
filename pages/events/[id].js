@@ -25,4 +25,23 @@ const EventDetail = () => {
     </React.Fragment>)
 }
 
+export async function getStaticProps(context) {
+    console.log('contextProps', context);
+
+    return {
+        props: {
+            event: null
+        }
+    }
+}
+
+export async function getStaticPaths(context) {
+    console.log('contextPaths', context);
+
+    return {
+        paths: [],
+        fallback: true
+    }
+}
+
 export default EventDetail;
