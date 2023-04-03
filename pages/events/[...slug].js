@@ -1,30 +1,68 @@
+import { Fragment, useEffect, useState } from 'react';
 import { getFilteredEvents } from '../../helpers/api-utils';
 import EventList from '../../components/EventList';
 import Button from '../../components/Button';
-import { Fragment } from 'react';
+import useSwr from 'swr';
+import { fetcher } from '../../utils/fetcher';
+import { useRouter } from 'next/router';
 
-const FilteredEventPage = (props) => {
+const FilteredEventPage = () => {
 
-    if(props.hasError) {
+    const router = useRouter();
+    const [events, setEvents] = useState();
+    const {data, error} = useSwr('https://nextjs-course-fc71e-default-rtdb.firebaseio.com/events.json', fetcher);
+
+    useEffect(() => {
+        if(data) {
+            const events = [];
+            for (let key in data) {
+                events.push({
+                    id: key,
+                    ...data[key]
+                });
+            }
+            setEvents(events);
+        }
+    }, [data])
+
+    if (!events) {
         return (<Fragment>
-            <div>
-                <h3>Invalid filter</h3>
-            </div>
-            <div>
-                <Button href="/events">Show All Events</Button>
-            </div>
+            <p>Loading...</p>
         </Fragment>)
     }
 
-    console.log(props);
-    const date = new Date(props.date.year, props.date.month);
+    const [yearValue, monthValue] = router.query.slug;
+
+    const year = +yearValue;
+    const month = +monthValue;
+    if(!(year || month) || isNaN(year) || isNaN(month) || year < 2015 || month < 1 || month > 12 || error) {
+        return (<Fragment>
+            <p>Invalid filter</p>
+            <Button href="/events" label="All events" />
+        </Fragment>)
+    }
+
+    let filteredEvents = events.filter((event) => {
+        const eventDate = new Date(event.date);
+        return eventDate.getFullYear() === +year && eventDate.getMonth() === +month - 1;
+    });
+
+    if(!filteredEvents || filteredEvents.length === 0) {
+        return (<Fragment>
+            <h2>No events in the filter</h2>
+            <Button href="/events" label="All events" />
+        </Fragment>)
+    }
+
+    const date = new Date(year, month);
 
     return (<div>
         <h1>{ date.getFullYear() } { date.getMonth() }</h1>
-        <EventList events={props.events} />
+        <EventList events={filteredEvents} />
     </div>)
 }
 
+/*
 export async function getServerSideProps(context) {
     console.log('contextProps', context);
     const { params } = context;
@@ -56,6 +94,6 @@ export async function getServerSideProps(context) {
         }
     }
 }
-
+*/
 
 export default FilteredEventPage;
