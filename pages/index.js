@@ -2,14 +2,13 @@ import { useRouter } from 'next/router';
 import { getFeaturedEvents, getFilteredEvents } from "../data";
 import EventList from "../components/EventList";
 import EventSearch from "../components/EventSearch";
+import { getAll } from '../helpers/api-utils';
 
 
 export default function Home(props) {
 
-  const featureEvents =  getFeaturedEvents();
-
   const router = useRouter();
-
+  const { events } = props;
   const onFilter = (year, month) => {
     router.push(`/events/${year}/${month}`)
   }
@@ -18,24 +17,19 @@ export default function Home(props) {
     <div>
         <h1>Home Page</h1>
         <EventSearch onSearch={onFilter} />
-        <EventList events={featureEvents} />
-        {props.products.map((product, index) => (
-          <div key={index}>
-            {product.title}
-          </div>
-        ))}
+        <EventList events={events} />
     </div>
   )
 
 }
 
+export async function getStaticProps() {
+  const events = await getAll()
 
-export async function getStaticProps() {  
-  return { props: {
-    products: [{
-      id: 1,
-      title: "Product 1"
-    }],
-    // revalidate: 10
-  }}
+  return {
+    props: {
+      events: events
+    },
+    revalidate: 60
+  }
 }
