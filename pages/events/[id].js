@@ -1,7 +1,5 @@
-import { useRouter } from 'next/router'
 import { getEventById } from '../../data';
 import React from 'react';
-import EventItem from '../../components/EventItem';
 import EventSummary from '../../components/EventSummary';
 import EventLogistics from '../../components/EventLogistics';
 import EventContent from '../../components/EventContent';

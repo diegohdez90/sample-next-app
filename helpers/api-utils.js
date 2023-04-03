@@ -24,3 +24,15 @@ export const getById = async (id) => {
     const events = await getAll();
     return events.find(item => event.id === id);
 }
+
+export const getFilteredEvents = async (dateFilter) => {
+    const events = await getAll();
+    const { year, month } = dateFilter;
+  
+    let filteredEvents = events.filter((event) => {
+        const eventDate = new Date(event.date);
+        return eventDate.getFullYear() === year && eventDate.getMonth() === month - 1;
+    });
+  
+    return filteredEvents;
+}
