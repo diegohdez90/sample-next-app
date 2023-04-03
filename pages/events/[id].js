@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { getEventById } from '../../data';
 import React from 'react';
 import EventSummary from '../../components/EventSummary';
@@ -15,6 +16,10 @@ const EventDetail = (props) => {
         </div>)
     }
     return (<React.Fragment>
+        <Head>
+            <title>Next JS Event Project</title>
+            <meta name='description' content='Great events you can attend'></meta>
+        </Head>
         <EventSummary title={event.title} />
         <EventLogistics date={event.date} address={event.location} image={event.image} imageAlt={event.title} />
         <EventContent>

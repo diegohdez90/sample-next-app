@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { getFeaturedEvents, getFilteredEvents } from "../data";
+import Head from 'next/head';
 import EventList from "../components/EventList";
 import EventSearch from "../components/EventSearch";
 import { getAll } from '../helpers/api-utils';
@@ -15,6 +15,10 @@ export default function Home(props) {
 
   return (
     <div>
+        <Head>
+          <title>Next JS Event Project</title>
+          <meta name='description' content='Great events you can attend'></meta>
+        </Head>
         <h1>Home Page</h1>
         <EventSearch onSearch={onFilter} />
         <EventList events={events} />

@@ -1,5 +1,5 @@
+import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
-import { getFilteredEvents } from '../../helpers/api-utils';
 import EventList from '../../components/EventList';
 import Button from '../../components/Button';
 import useSwr from 'swr';
@@ -37,6 +37,10 @@ const FilteredEventPage = () => {
     const month = +monthValue;
     if(!(year || month) || isNaN(year) || isNaN(month) || year < 2015 || month < 1 || month > 12 || error) {
         return (<Fragment>
+            <Head>
+                <title>Next JS Event Project</title>
+                <meta name='description' content='Invalid filter'></meta>
+            </Head>
             <p>Invalid filter</p>
             <Button href="/events" label="All events" />
         </Fragment>)
@@ -49,6 +53,10 @@ const FilteredEventPage = () => {
 
     if(!filteredEvents || filteredEvents.length === 0) {
         return (<Fragment>
+            <Head>
+                <title>Next JS Event Project</title>
+                <meta name='description' content='Error in retrieve events'></meta>
+            </Head>
             <h2>No events in the filter</h2>
             <Button href="/events" label="All events" />
         </Fragment>)
@@ -57,6 +65,10 @@ const FilteredEventPage = () => {
     const date = new Date(year, month);
 
     return (<div>
+        <Head>
+            <title>Next JS Event Project</title>
+            <meta name='description' content='List of events'></meta>
+        </Head>
         <h1>{ date.getFullYear() } { date.getMonth() }</h1>
         <EventList events={filteredEvents} />
     </div>)
