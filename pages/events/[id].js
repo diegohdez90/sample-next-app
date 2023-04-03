@@ -17,8 +17,8 @@ const EventDetail = (props) => {
     }
     return (<React.Fragment>
         <Head>
-            <title>Next JS Event Project</title>
-            <meta name='description' content='Great events you can attend'></meta>
+            <title>{ event.title }</title>
+            <meta name='description' content={event.description}></meta>
         </Head>
         <EventSummary title={event.title} />
         <EventLogistics date={event.date} address={event.location} image={event.image} imageAlt={event.title} />
