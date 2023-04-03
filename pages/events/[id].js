@@ -5,11 +5,11 @@ import EventItem from '../../components/EventItem';
 import EventSummary from '../../components/EventSummary';
 import EventLogistics from '../../components/EventLogistics';
 import EventContent from '../../components/EventContent';
+import { getAll } from '../../helpers/api-utils';
 
-const EventDetail = () => {
-    const router = useRouter();
-    const { id } = router.query;
-    const event = getEventById(id);
+const EventDetail = (props) => {
+
+    const {event} = props;
 
     if(!event) {
         return (<div>
@@ -28,18 +28,26 @@ const EventDetail = () => {
 export async function getStaticProps(context) {
     console.log('contextProps', context);
 
+    const { id } = context.params;
+
+    const event = getEventById(id);
+
     return {
         props: {
-            event: null
+            event: event || null
         }
     }
 }
 
 export async function getStaticPaths(context) {
     console.log('contextPaths', context);
-
+    const events = await getAll();
     return {
-        paths: [],
+        paths: events.map(event => ({
+            params: {
+                id: event.id
+            }
+        })),
         fallback: true
     }
 }
