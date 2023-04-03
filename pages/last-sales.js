@@ -2,21 +2,15 @@ import { Fragment, useEffect, useState } from "react";
 import useSwr from 'swr';
 import { fetcher } from "../utils/fetcher";
 
-const LastSales = () => {
+const LastSales = (props) => {
 
     // const [isLoading, setIsLoading] = useState(true);
-    const [sales, setSales] = useState([]);
+    const [sales, setSales] = useState(props.sales);
 
     const { data, error } = useSwr('https://nextjs-course-fc71e-default-rtdb.firebaseio.com/sales.json', fetcher);
     
-
-    console.log('data', data);
-    console.log('error', error);
-
     useEffect(() => {
-        console.log(data);
         if (data) {
-            console.log(data);
             const transformedSales = [];
             for (let key in data) {
                 transformedSales.push({
@@ -52,7 +46,7 @@ const LastSales = () => {
     //        })
     //}, [])
 
-    if(!data || !sales) {
+    if(!data && !sales) {
         return (<Fragment>
             <p>Loading...</p>
         </Fragment>);
@@ -77,6 +71,30 @@ const LastSales = () => {
         </div>
     </Fragment>;
 }
+
+export async function getStaticProps() {
+    const response = await fetch('https://nextjs-course-fc71e-default-rtdb.firebaseio.com/sales.json')
+    const data = await response.json();
+    const transformedSales = []
+
+    if (data) {
+
+        for (let key in data) {
+            transformedSales.push({
+                id: key,
+                username: data[key].username,
+                volume: data[key].volume
+            });
+        }
+    }
+    return {
+        props: {
+            sales: transformedSales
+        },
+        revalidate: 10
+    };
+}
+
 
 export default LastSales;
 
