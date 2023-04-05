@@ -1,23 +1,20 @@
 import Head from 'next/head';
 import { getEventById } from '../../data';
-import React from 'react';
+import React, { useContext } from 'react';
 import EventSummary from '../../components/EventSummary';
 import EventLogistics from '../../components/EventLogistics';
 import EventContent from '../../components/EventContent';
 import { getAll } from '../../helpers/api-utils';
 import Feedback from '../../components/Feedback';
+import NotificationContext from '../../store/notitication-context';
 
 const EventDetail = (props) => {
 
     const {event} = props;
 
+    const context = useContext(NotificationContext)
+
     const onSubmitFeedback = (name, email, feedback) => {
-        console.log(
-            name,
-            email,
-            feedback,
-            event.id
-        );
         fetch('/api/feedback', {
             method: 'POST',
             body: JSON.stringify({
@@ -32,7 +29,7 @@ const EventDetail = (props) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                context.showNotification({title: 'Feedback sent', message: data.message, status: 'success'})
             })
     }
 
@@ -56,7 +53,6 @@ const EventDetail = (props) => {
 }
 
 export async function getStaticProps(context) {
-    console.log('contextProps', context);
 
     const { id } = context.params;
 
@@ -70,7 +66,6 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths(context) {
-    console.log('contextPaths', context);
     const events = await getAll();
     return {
         paths: events.map(event => ({

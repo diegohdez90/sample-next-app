@@ -10,7 +10,6 @@ const Feedback = (props) => {
         e.preventDefault();
         const name = nameRef.current.value;
         const email = emailRef.current.value;
-        console.log(feedbackRef.current);
         const feedback = feedbackRef.current.value;
         props.onSummit(name, email, feedback);
     }
