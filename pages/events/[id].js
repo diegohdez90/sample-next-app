@@ -5,10 +5,36 @@ import EventSummary from '../../components/EventSummary';
 import EventLogistics from '../../components/EventLogistics';
 import EventContent from '../../components/EventContent';
 import { getAll } from '../../helpers/api-utils';
+import Feedback from '../../components/Feedback';
 
 const EventDetail = (props) => {
 
     const {event} = props;
+
+    const onSubmitFeedback = (name, email, feedback) => {
+        console.log(
+            name,
+            email,
+            feedback,
+            event.id
+        );
+        fetch('/api/feedback', {
+            method: 'POST',
+            body: JSON.stringify({
+                name,
+                email,
+                feedback,
+                eventId: event.id
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+    }
 
     if(!event) {
         return (<div>
@@ -25,6 +51,7 @@ const EventDetail = (props) => {
         <EventContent>
             <p>{event.description}</p>
         </EventContent>
+        <Feedback onSummit={onSubmitFeedback} />
     </React.Fragment>)
 }
 
