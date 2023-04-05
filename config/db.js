@@ -1,23 +1,27 @@
-const MongoDB = require('mongodb');
-const ServerApiVersion = MongoDB.ServerApiVersion;
-
-const mongoClient = new MongoDB.MongoClient('mongodb+srv://erembroc:f87B2gN6srDAR15D@feedbackcluster.tc8zwhk.mongodb.net/?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverApi: ServerApiVersion.v1 });
+import { MongoClient, ServerApiVersion } from 'mongodb';
 
 
-async function connect() {
+export async function connect() {
 
+    const mongoClient = new MongoClient('mongodb+srv://erembroc:f87B2gN6srDAR15D@feedbackcluster.tc8zwhk.mongodb.net/?retryWrites=true&w=majority', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverApi: ServerApiVersion.v1 });
+    
     try {
         await mongoClient.connect();
-        await mongoClient.db('feedback')
+        return mongoClient;
     } catch (error) {
         console.error('Connection failed!');
         process.exit();
     }
 }
 
-connect().catch(console.dir);
+export async function create(client, dbName, collection, data) {
+    const db = client.db(dbName);
+    await db.collection(collection).insertOne(data);
+}
 
-module.exports = mongoClient;
+export async function close(client) {
+    client.close();
+}
